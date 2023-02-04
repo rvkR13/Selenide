@@ -1,49 +1,51 @@
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import page.PagePracticeForm;
+import page.PopUpCalendar;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 
-public class PracticeFormTest {
-    @BeforeEach
-    void setUp() {
-        Configuration.browserSize = "1920x1080";
-        open("https://demoqa.com/automation-practice-form");
-    }
+
+public class PracticeFormTest extends BaseTest {
+    String FIRSTNAME = DataGenerator.getRandomFirstName();
+    String LASTNAME = DataGenerator.getRandomLastName();
+    String GENDER = DataGenerator.getRandomGender();
+    String NUMBER = DataGenerator.getRandomNumber();
+    String ADDRESS = DataGenerator.getRandomAddress();
+    PagePracticeForm pagePracticeForm = new PagePracticeForm();
+    PopUpCalendar popUpCalendar = new PopUpCalendar();
 
     @Test
     void fillFormTest() {
-        $("#firstName").setValue("111");
-        $("#lastName").setValue("34567");
-        $("#userEmail").setValue("er@ee.ru");
-        $$("label.custom-control-label").filter(text("Female")).get(0).click();
-        $("#userNumber").setValue("1111111111");
-        $("#dateOfBirthInput").click();
-        $(".react-datepicker__month-select").selectOption("June");
-        $(".react-datepicker__year-select").selectOption("2006");
-        $("[aria-label=\"Choose Thursday, June 15th, 2006\"]").click();
-        $("#dateOfBirth").click();
-        $("#subjectsInput").setValue("history").pressEnter();
-        $("#hobbies-checkbox-3").parent().click();
-        $("#currentAddress").setValue("jyhg");
-        $("#state").click();
-        $("#stateCity-wrapper").$(byText("NCR")).click();
-        $("#city").click();
-        $("#stateCity-wrapper").$(byText("Noida")).click();
-        $("#submit").click();
 
+        open("https://demoqa.com/automation-practice-form");
+        pagePracticeForm.openPage()
+                .inputFirstName(FIRSTNAME)
+                .inputLastName(LASTNAME)
+                .inputEmail(String.valueOf(DataGenerator.EMAIL))
+                .chooseGender(GENDER)
+                .setNumber(NUMBER);
 
-        $x("//td[text()='Student Name']").parent().shouldHave(text("111 34567"));
-        $x("//td[text()='Student Email']").parent().shouldHave(text("er@ee.ru"));
-        $x("//td[text()='Gender']").parent().shouldHave(text("Female"));
-        $x("//td[text()='Mobile']").parent().shouldHave(text("1111111111"));
-        $x("//td[text()='Date of Birth']").parent().shouldHave(text("15 June,2006"));
-        $x("//td[text()='Subjects']").parent().shouldHave(text("History"));
-        $x("//td[text()='Hobbies']").parent().shouldHave(text("Music"));
-        $x("//td[text()='Address']").parent().shouldHave(text("jyhg"));
-        $x("//td[text()='Address']").parent().shouldHave(text("jyhg"));
-        $x("//td[text()='State and City']").parent().shouldHave(text("NCR Noida"));
+        popUpCalendar.setData()
+                .setMonth("January")
+                .setYear("2006")
+                .setDay()
+                .closedPopUp();
+        pagePracticeForm.subjectsInput("history")
+                .chooseHobbies()
+                .inputAddress(ADDRESS)
+                .chooseState()
+                .selectState()
+                .chooseCity()
+                .selectCity()
+                .selectSubmit();
+
+        pagePracticeForm.check("Student Name", FIRSTNAME + " " + LASTNAME);
+        pagePracticeForm.check("Student Email", DataGenerator.EMAIL);
+        pagePracticeForm.check("Gender", GENDER);
+        pagePracticeForm.check("Subjects", "History");
+        pagePracticeForm.check("Hobbies", "Music");
+        pagePracticeForm.check("Date of Birth", "30 January,2006");
+        pagePracticeForm.check("Address", ADDRESS);
+        pagePracticeForm.check("State and City", "NCR Noida");
     }
 }
