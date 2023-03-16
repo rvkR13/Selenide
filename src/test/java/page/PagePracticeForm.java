@@ -7,6 +7,9 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
+/**
+ * Класс со страницей PracticeForm
+ */
 public class PagePracticeForm {
 
     private final SelenideElement formTitle = $("h5"),

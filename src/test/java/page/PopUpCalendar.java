@@ -5,6 +5,9 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
+/**
+ * Класс со страницей календаря
+ */
 public class PopUpCalendar {
     SelenideElement openPopUp = $("#dateOfBirthInput"),
 
