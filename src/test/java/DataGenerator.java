@@ -1,5 +1,8 @@
 import com.github.javafaker.Faker;
 
+/**
+ * Вспомогательный класс с генерацией тестовых данных
+ */
 public class DataGenerator {
 
     public static final String NUMBER = "[1-9]{10}";
